@@ -5,9 +5,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    qDebug() << QThread::currentThread();
+
     ui->setupUi(this);
 
-    ui->updatePushButton->hide();
+    //ui->updatePushButton->hide();
     ui->updateProgressBar->setDisabled(true);
 
     // update thread
@@ -43,4 +45,8 @@ void MainWindow::updateState(const QString state)
 void MainWindow::updateProgress(const QString filename, const int val, const int max)
 {
 
+}
+
+void MainWindow::on_cancelPushButton_clicked()
+{
 }
