@@ -4,6 +4,9 @@
 #include <QThread>
 #include <QDebug>
 
+const QString defaultRepository("http://127.0.0.1/repository/");
+const QString defaultVersionXML("version.xml");
+
 Update::Update(QObject *parent)
     : QObject(parent)
 {
@@ -18,6 +21,11 @@ Update::~Update(void)
 {
 
 }
+void Update::fetchVersionXML(const QString urlVersionXML)
+{
+
+}
+
 void Update::run(void)
 {
 

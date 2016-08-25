@@ -2,7 +2,6 @@
 
 #include <QUrl>
 #include <QtNetwork>
-#include <QMessageBox>
 #include <QDebug>
 
 HttpFile::HttpFile(QObject *parent)
@@ -18,6 +17,11 @@ HttpFile::HttpFile(QObject *parent)
     connect(qnam, &QNetworkAccessManager::sslErrors,
             this, &HttpFile::sslErrors);
 #endif
+}
+
+HttpFile::~HttpFile(void)
+{
+
 }
 
 void HttpFile::startRequest(const QUrl &requestedUrl)

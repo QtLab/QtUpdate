@@ -13,6 +13,9 @@ public:
     explicit Update(QObject *parent = 0);
     ~Update(void);
 
+private:
+    void fetchVersionXML(const QString urlVersionXML);
+
 signals:
     void updateStateSignal(const QString state);
     void updateProgressSignal(const QString filename, const int val, const int max);

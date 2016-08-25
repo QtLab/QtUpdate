@@ -6,13 +6,9 @@
 
 QT_BEGIN_NAMESPACE
 class QFile;
-class QLabel;
-class QLineEdit;
-class QPushButton;
 class QSslError;
 class QAuthenticator;
 class QNetworkReply;
-class QCheckBox;
 
 QT_END_NAMESPACE
 
@@ -24,6 +20,7 @@ class HttpFile : public QObject
 
 public:
     explicit HttpFile(QObject *paretn = Q_NULLPTR);
+    ~HttpFile(void);
 
     void startRequest(const QUrl &requestedUrl);
     void downloadFile(const QString urlSpec, const QString directory = QString("./"));
