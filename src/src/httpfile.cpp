@@ -26,9 +26,6 @@ HttpFile::~HttpFile(void)
 
 void HttpFile::startRequest(const QUrl &requestedUrl)
 {
-    qDebug() << QString("%1")
-                .arg(__func__);
-
     url = requestedUrl;
     httpRequestAborted = false;
 
@@ -39,10 +36,6 @@ void HttpFile::startRequest(const QUrl &requestedUrl)
 
 void HttpFile::downloadFile(const QString urlSpec, const QString directory)
 {
-    qDebug() << QString("%1")
-                .arg(__func__);
-    qDebug() << urlSpec;
-
     if (urlSpec.isEmpty())
         return;
 
@@ -57,8 +50,10 @@ void HttpFile::downloadFile(const QString urlSpec, const QString directory)
     }
 
     QString downloadDirectory = QDir::cleanPath(directory);
+    qDebug() << __func__ << downloadDirectory;
     if (!downloadDirectory.isEmpty() && QFileInfo(downloadDirectory).isDir()) {
         fileName.prepend(downloadDirectory + '/');
+        qDebug() << __func__ << fileName;
     }
 
     if (QFile::exists(fileName)) {
@@ -105,15 +100,8 @@ void HttpFile::cancelDownload()
 
 void HttpFile::httpFinished()
 {
-    qDebug() << QString("%1")
-                .arg(__func__);
-
     QFileInfo fi;
     if (file) {
-        qDebug() << QString("%1 %2")
-                    .arg(__func__)
-                    .arg(__LINE__);
-
         fi.setFile(file->fileName());
         file->close();
         delete file;
@@ -121,23 +109,16 @@ void HttpFile::httpFinished()
     }
 
     if (httpRequestAborted) {
-        qDebug() << QString("%1 %2")
-                    .arg(__func__)
-                    .arg(__LINE__);
-
         reply->deleteLater();
         reply = Q_NULLPTR;
         return;
     }
 
     if (reply->error()) {
-        qDebug() << QString("%1 %2")
-                    .arg(__func__)
-                    .arg(__LINE__);
-
         QFile::remove(fi.absoluteFilePath());
         reply->deleteLater();
         reply = Q_NULLPTR;
+        emit httpFinishedSignal(fi.fileName(), false);
         return;
     }
 
@@ -148,6 +129,7 @@ void HttpFile::httpFinished()
 
     if (!redirectionTarget.isNull()) {
         const QUrl redirectedUrl = url.resolved(redirectionTarget.toUrl());
+        qDebug() << __func__ << __LINE__ << QString("wta");
 #if 0
         if (QMessageBox::question(this, tr("Redirect"),
                                   tr("Redirect to %1 ?").arg(redirectedUrl.toString()),
@@ -164,21 +146,15 @@ void HttpFile::httpFinished()
         return;
     }
 
-    qDebug() << QString("%1 %2")
-                .arg(__func__)
-                .arg("finished~");
 #if 0
     statusLabel->setText(tr("Downloaded %1 bytes to %2\nin\n%3")
                          .arg(fi.size()).arg(fi.fileName(), QDir::toNativeSeparators(fi.absolutePath())));
 #endif
+    emit httpFinishedSignal(fi.fileName(), true);
 }
 
 void HttpFile::httpReadyRead()
 {
-    qDebug() << QString("%1")
-                .arg(__func__);
-
-    // this slot gets called every time the QNetworkReply has new data.
     // We read all of its new data and write it into the file.
     // That way we use less RAM than when reading it at the finished()
     // signal of the QNetworkReply
@@ -188,7 +164,6 @@ void HttpFile::httpReadyRead()
 
 void HttpFile::slotAuthenticationRequired(QNetworkReply*,QAuthenticator *authenticator)
 {
-    qDebug() << "authentication required";
 #if 0
     QDialog authenticationDialog;
     Ui::Dialog ui;

@@ -25,6 +25,9 @@ public:
     void startRequest(const QUrl &requestedUrl);
     void downloadFile(const QString urlSpec, const QString directory = QString("./"));
 
+signals:
+    void httpFinishedSignal(const QString filename, const bool isSuccess);
+
 private slots:
     void cancelDownload();
     void httpFinished();
