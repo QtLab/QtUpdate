@@ -23,9 +23,9 @@ private:
     QString getVersionDescription(const QDomDocument * doc);
     QString currentVersion(void);
     QDomElement getFileList(const QDomDocument *doc);
-    QDomElement findFileInList(const QString filename, const QDomElement fileList);
+    QDomElement findFileInList(const QDomElement file, const QDomElement fileList);
     int versionCmp(const QString version1, const QString version2, bool * ok);
-    void findAddedFile(const QDomDocument * docNew, const QDomDocument * docOld);
+    void findChangedFile(const QDomDocument * docNew, const QDomDocument * docOld);
     void findUpdatedFile(const QDomDocument * docNew, const QDomDocument * docOld);
     void findRemovedFile(const QDomDocument * docNew, const QDomDocument * docOld);
     void addFile(void);

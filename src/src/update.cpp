@@ -168,13 +168,14 @@ QDomElement Update::getFileList(const QDomDocument *doc)
     return QDomElement();
 }
 
-QDomElement Update::findFileInList(const QString filename, const QDomElement fileList)
+QDomElement Update::findFileInList(const QDomElement file, const QDomElement fileList)
 {
     QDomNode n = fileList.firstChild();
     while (!n.isNull())  {
         QDomElement e = n.toElement();
         if (!e.isNull()) {
-            if (filename == e.attribute("filename")) {
+            if (file.attribute("filename") == e.attribute("filename")
+                && file.attribute("dir") == e.attribute("dir")) {
                 return e;
             }
         }
@@ -220,7 +221,7 @@ int Update::versionCmp(const QString version1, const QString version2, bool * ok
     return -1;
 }
 
-void Update::findAddedFile(const QDomDocument *docNew, const QDomDocument *docOld)
+void Update::findChangedFile(const QDomDocument *docNew, const QDomDocument *docOld)
 {
     QDomElement fileListNew = getFileList(docNew);
     QDomElement fileListOld = getFileList(docNew);
@@ -234,11 +235,14 @@ void Update::findAddedFile(const QDomDocument *docNew, const QDomDocument *docOl
     while (!n.isNull()) {
         QDomElement fileNew = n.toElement();
         if (!fileNew.isNull()) {
-            QDomElement fileOld = findFileInList(fileNew.attribute("filename"), fileListOld);
+            QDomElement fileOld = findFileInList(fileNew, fileListOld);
             if (fileOld.isNull()) {
-
+                QString filepath = fileNew.attribute("dir")
+                                    .append("/")
+                                    .append(fileNew.attribute("filename"));
+                addedFileList->append(QDir::cleanPath(filepath));
             } else {
-
+                if ()
             }
         }
         n = n.nextSibling();
